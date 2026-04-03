@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | Foodlio</title>
+    <meta name="description" content="Learn more about Foodlio, our mission, and our leadership team." />
+    <link rel="icon" href="foodliologo.png" type="image/png" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #FF474D;
+            --primary-dark: #C1121F;
+            --accent: #457B9D;
+            --dark: #1D3557;
+            --light: #f0ffceec;
+            --text-muted: #6c757d;
+            --radius: 18px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Removed bg-overlay styles as background image is gone */
+
+        /* Navbar styling: Glassmorphism Floating Style */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 5%;
+            background: #f8ffed;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo img {
+            height: 50px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem 5%;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            background-color: transparent;
+            color: var(--dark);
+        }
+
+        /* Reset container text highlight to dark color, keeping it out of the cards */
+        .container:not(.leadership-redesign) h2,
+        .container:not(.leadership-redesign) h3,
+        .container:not(.leadership-redesign) p,
+        .container:not(.leadership-redesign) li,
+        .container:not(.leadership-redesign) strong {
+            color: var(--dark) !important;
+        }
+
+        /* Adjusting cards to be glassy over the new background */
+        .container .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .container .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .container .team-contact {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--dark);
+        }
+
+        .container .cta-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+
+        .container .cta-btn {
+            background: #ffffff;
+            color: #A03A13;
+        }
+
+        .container .feature-list li::before {
+            background: rgba(255, 71, 77, 0.1);
+            color: var(--primary);
+        }
+
+        .glass-card,
+        .team-card,
+        .cta-section {
+            transition: transform 0.2s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .glass-card:not(.no-tilt):hover,
+        .team-card:hover {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Glass Effect Components */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add a subtle shine effect to glass cards */
+        .glass-card:not(.no-tilt)::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.6s ease;
+            pointer-events: none;
+        }
+
+        .glass-card:not(.no-tilt):hover::after {
+            left: 100%;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+        }
+
+        .page-title {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            color: #fff;
+            text-align: center;
+            margin-top: 4rem;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            animation: fadeInDown 1s ease;
+        }
+
+        /* Headings inside cards */
+        .glass-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Intro Section */
+        .intro-section {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Grid system for sections */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .feature-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
+
+        .feature-list li::before {
+            content: '✔';
+            color: var(--primary);
+            font-weight: bold;
+            background: rgba(255, 71, 77, 0.15);
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Leadership Team */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .team-card {
+            background: #ffffff;
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            border-bottom: 4px solid var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .team-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .team-role {
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .team-contact {
+            font-size: 0.95rem;
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            width: fit-content;
+        }
+
+        .team-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        /* Footer CTA */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #fff;
+            border-radius: var(--radius);
+            margin-bottom: 4rem;
+            box-shadow: 0 15px 40px rgba(193, 18, 31, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::after {
+            content: 'about';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(15deg);
+            user-select: none;
+        }
+
+        .cta-section h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 2.2rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            padding: 14px 34px;
+            background: #fff;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn:hover {
+            background: var(--dark);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* NEW LEADERSHIP SECTION STYLES */
+        .leadership-redesign {
+            display: block;
+            margin: 2rem 0;
+            padding: 1rem;
+            min-height: 550px;
+        }
+
+        .team-gallery {
+            display: flex;
+            gap: 1rem;
+            height: 550px;
+            perspective: 1000px;
+            width: 100%;
+        }
+
+        .gallery-card {
+            flex: 1;
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.33, 1);
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .gallery-card:hover {
+            flex: 6;
+            z-index: 10;
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 255, 136, 0.3);
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.33, 1);
+            transform: scale(1.1);
+        }
+
+        .gallery-card:hover .gallery-img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+            transform: translateY(20px);
+        }
+
+        .gallery-card:hover .gallery-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-name {
+            color: #ffffff;
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+            letter-spacing: -1.5px;
+            line-height: 1;
+        }
+
+        .gallery-role {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .vertical-label {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-90deg);
+            transform-origin: bottom center;
+            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            text-transform: uppercase;
+        }
+
+        .gallery-card:hover .vertical-label {
+            opacity: 0;
+            transform: translateX(-50%) rotate(-90deg) translateY(-20px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 2rem;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="foodliologo.png" alt="Foodlio Logo">
+        </a>
+    </nav>
+
+    <h1 class="page-title" style="color: var(--dark); text-shadow: none;">About Us</h1>
+
+    <div class="container">
+
+        <!-- Intro Card -->
+        <div class="glass-card intro-section">
+            <p style="font-size: 1.4rem; margin-bottom: 1.2rem; font-weight: 500;">
+                Welcome to <strong style="color: var(--primary);">Foodlio</strong>, your trusted partner for fast, easy,
+                and delicious food ordering.
+            </p>
+            <p style="margin-bottom: 1.2rem; color: var(--dark);">
+                We are passionate about connecting food lovers with their favorite restaurants. Whether you're craving
+                local street food, home-style meals, or international cuisine, our platform brings everything to your
+                fingertips with just a few clicks.
+            </p>
+            <p style="color: var(--dark);">
+                At <strong style="font-weight: 700;">Foodlio</strong>, we aim to make food ordering simple, convenient,
+                and enjoyable. Our user-friendly interface allows you to explore menus, customize your orders, and get
+                your food delivered quickly to your doorstep.
+            </p>
+        </div>
+
+        <div class="grid-2">
+            <!-- Mission -->
+            <div class="glass-card">
+                <h2> Our Mission</h2>
+                <p style="margin-top: 1rem; color: var(--dark);">
+                    Our mission is to make ordering food effortless and accessible for everyone. We strive to support
+                    local restaurants while providing customers with a wide variety of food choices.
+                </p>
+            </div>
+
+            <!-- Why Choose Us -->
+            <div class="glass-card">
+                <h2>Why Choose Us?</h2>
+                <p style="margin-top: 1rem; color: var(--dark);">
+                    We focus on quality, speed, and customer satisfaction. Our platform is designed to save your time
+                    and give you the best food experience without any hassle.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- What We Offer -->
+            <div class="glass-card">
+                <h2> What We Offer</h2>
+                <ul class="feature-list">
+                    <li>A wide range of restaurants and cuisines</li>
+                    <li>Easy and secure online ordering</li>
+                    <li>Fast and reliable delivery service</li>
+                    <li>Real-time order tracking</li>
+                    <li>Customer-friendly support</li>
+                </ul>
+            </div>
+
+            <!-- Commitment -->
+            <div class="glass-card">
+                <h2>Our Commitment</h2>
+                <p style="margin-top: 1rem; color: var(--dark);">
+                    We are committed to delivering not just food, but happiness. From order placement to delivery, we
+                    ensure a smooth and satisfying experience every time.
+                </p>
+            </div>
+        </div>
+
+        <!-- Leadership Team Redesign -->
+        <div class="glass-card no-tilt" style="background: rgba(0,0,0,0.2); border: none;">
+            <h2
+                style="text-align: center; margin-bottom: 2.5rem; color: #fff; text-shadow: 0 0 20px rgba(0,255,136,0.3);">
+                Our Team</h2>
+
+            <div class="leadership-redesign">
+                <!-- Team Gallery (Now includes CEO) -->
+                <div class="team-gallery">
+                    <!-- CEO Card -->
+                    <div class="gallery-card">
+                        <img src="barza.jpeg" alt="Barza" class="gallery-img">
+                        <div class="vertical-label">Barza - CEO</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Cheif Executive Officer</div>
+                            <div class="gallery-name">Barza</div>
+                        </div>
+                    </div>
+
+                    <!-- COO Card -->
+                    <div class="gallery-card">
+                        <img src="sinsha.jpeg" alt="Sinsha" class="gallery-img">
+                        <div class="vertical-label">Sinsha - COO</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Chief Operating Officer</div>
+                            <div class="gallery-name">Sinsha</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <img src="liyana.jpeg" alt="Liyana" class="gallery-img">
+                        <div class="vertical-label">Liyana - CFO</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Chief Financial Officer</div>
+                            <div class="gallery-name">Liyana</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <img src="hamna.jpeg" alt="Hamna" class="gallery-img">
+                        <div class="vertical-label">Hamna - CTO</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Chief Technology Officer</div>
+                            <div class="gallery-name">Hamna</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <img src="dhiya.jpeg" alt="Dhiya TV" class="gallery-img">
+                        <div class="vertical-label">Dhiya TV - CMO</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Chief Marketing Officer</div>
+                            <div class="gallery-name">Dhiya TV</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card">
+                        <img src="hiba.jpeg" alt="Hiba" class="gallery-img">
+                        <div class="vertical-label">Hiba - GM</div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-role">Chief Manager</div>
+                            <div class="gallery-name">Hiba</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Us CTA -->
+        <div class="cta-section no-tilt">
+            <h2> Join us and enjoy your favorite meals anytime, anywhere!</h2>
+            <p>Your favorite food is just a few clicks away.</p>
+            <a href="index.html" class="cta-btn">Start Ordering Now</a>
+        </div>
+
+    </div>
+    <script>
+        // 3D Tilt Effect for premium card movement
+        const cards = document.querySelectorAll('.glass-card:not(.no-tilt), .team-card:not(.no-tilt), .cta-section:not(.no-tilt)');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Calculate rotation based on distance from center (max 15 degrees)
+                const rotateX = ((y - centerY) / centerY) * -15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
