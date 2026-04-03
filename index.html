@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foodlio — Order Food & More</title>
+  <link rel="icon" href="foodliologo.png" type="image/png" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <meta name="theme-color" content="#FF474D" />
+  <style>
+    :root {
+      --primary: #FF474D;
+      --primary-dark: #C1121F;
+      --accent: #457B9D;
+      --dark: #1D3557;
+      --light: #ffffff;
+      --card-bg: #ffe4e4;
+      --text-muted: #6c757d;
+      --green: #2A9D8F;
+      --radius: 18px;
+      --shadow: 0 8px 40px rgba(230, 57, 70, 0.15);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0 5%;
+      height: 80px;
+      background: #f8ffed;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .logo img {
+      height: 50px;
+      display: block;
+    }
+
+    .nav-separator {
+      color: #ccc;
+      font-size: 1.5rem;
+      font-weight: 300;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      margin-left: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all .25s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 75, 43, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ── HERO BANNER (auto-sliding) ── */
+    .hero {
+      margin-top: 0;
+      position: relative;
+      overflow: hidden;
+      height: 520px;
+    }
+
+    .slides-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(.77, 0, .175, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 8%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide-1 {
+      background: linear-gradient(120deg, #1a1a1a 45%, #FF4B2B 100%);
+    }
+
+    .slide-2 {
+      background: linear-gradient(120deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    }
+
+    .slide-3 {
+      background: linear-gradient(120deg, #2d1b00 0%, #8B3A00 60%, #FFB703 100%);
+    }
+
+    .slide-content {
+      max-width: 560px;
+      z-index: 2;
+    }
+
+    .slide-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 50px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .slide-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .slide-title span {
+      color: var(--accent);
+    }
+
+    .slide-desc {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .slide-emoji {
+      position: absolute;
+      right: 6%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: clamp(6rem, 14vw, 11rem);
+      opacity: 0.18;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all .3s;
+    }
+
+    .dot.active {
+      background: #fff;
+      width: 28px;
+      border-radius: 50px;
+    }
+
+    .hero-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+    }
+
+    .hero-arrow:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .hero-arrow.left {
+      left: 20px;
+    }
+
+    .hero-arrow.right {
+      right: 20px;
+    }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 60px 5%;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+
+    .nav-arrows {
+      display: flex;
+      gap: 8px;
+    }
+
+    .arr-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid #ddd;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all .2s;
+    }
+
+    .arr-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* ── TOP OFFERS ── */
+    .offers-scroll-wrapper {
+      position: relative;
+      padding: 0 28px;
+    }
+
+    .offers-fade-left,
+    .offers-fade-right {
+      position: absolute;
+      top: 0;
+      bottom: 8px;
+      width: 80px;
+      pointer-events: none;
+      z-index: 2;
+      transition: opacity .3s;
+    }
+
+    .offers-fade-left {
+      left: 0;
+      background: linear-gradient(to right, #fff 60%, transparent);
+    }
+
+    .offers-fade-right {
+      right: 0;
+      background: linear-gradient(to left, #fff 60%, transparent);
+    }
+
+    .offers-scroll-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #e8e2dc;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--dark);
+      transition: all .22s;
+    }
+
+    .offers-scroll-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .offers-scroll-btn.left {
+      left: -16px;
+    }
+
+    .offers-scroll-btn.right {
+      right: -16px;
+    }
+
+    .offers-scroll-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .offers-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: #e0d8d0 transparent;
+      scroll-behavior: smooth;
+      cursor: grab;
+    }
+
+    .offers-track:active {
+      cursor: grabbing;
+    }
+
+    .offers-track::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .offers-track::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .offers-track::-webkit-scrollbar-thumb {
+      background: #e0d8d0;
+      border-radius: 50px;
+    }
+
+    .offer-card {
+      min-width: 160px;
+      border-radius: var(--radius);
+      border: 2px solid #f0ece8;
+      background: #fff;
+      padding: 18px 14px;
+      cursor: pointer;
+      transition: all .25s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .offer-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .offer-card.highlight {
+      background: #1a1a1a;
+      color: #fff;
+      border-color: #1a1a1a;
+    }
+
+    .offer-card.highlight .offer-label {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .offer-emoji {
+      font-size: 2.4rem;
+    }
+
+    .offer-emoji img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .offer-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+
+    .offer-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .offer-card.highlight .offer-label {
+      color: var(--accent);
+    }
+
+    .off-badge {
+      background: var(--dark);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 8px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .happy-time {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ── RESTAURANTS ── */
+    .restaurants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+    }
+
+    .restaurant-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+      cursor: pointer;
+      transition: all .25s;
+    }
+
+    .restaurant-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.13);
+    }
+
+    .rest-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .rest-img-placeholder {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .rest-img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .rest-body {
+      padding: 14px 16px 16px;
+    }
+
+    .rest-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .rest-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .rest-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .rest-offer {
+      background: #edfff6;
+      color: var(--green);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .rest-price {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* ── CALL SUPPORT BAR ── */
+    .support-bar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      padding: 28px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .support-bar-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .support-bar-text p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+
+    .call-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all .25s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .call-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 75, 43, 0.4);
+    }
+
+    .call-icon {
+      font-size: 1.2rem;
+      animation: ring 1.5s infinite;
+    }
+
+    @keyframes ring {
+
+      0%,
+      100% {
+        transform: rotate(0)
+      }
+
+      20% {
+        transform: rotate(-15deg)
+      }
+
+      40% {
+        transform: rotate(15deg)
+      }
+
+      60% {
+        transform: rotate(-10deg)
+      }
+
+      80% {
+        transform: rotate(10deg)
+      }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #fff;
+      padding: 50px 5% 0;
+      border-top: 1px solid #f0ece8;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      gap: 32px;
+      padding-bottom: 40px;
+    }
+
+    .footer-brand .logo {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      max-width: 220px;
+    }
+
+    .footer-col h4 {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 9px;
+    }
+
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color .2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f4f1ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all .2s;
+    }
+
+    .social-link img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: scale(1.1);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #f0ece8;
+      padding: 22px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .app-badges {
+      display: flex;
+      gap: 10px;
+    }
+
+    .app-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .app-badge img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .app-badge:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .app-badge span {
+      font-size: 1.3rem;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-container {
+      margin-top: 80px;
+      width: 100%;
+      background: var(--dark);
+      color: #fff;
+      padding: 12px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-content {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: space-around;
+      min-width: 100%;
+    }
+
+    .marquee-content span {
+      padding: 0 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px) {
+      nav {
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .nav-separator {
+        display: none;
+      }
+
+      .nav-actions {
+        margin-left: 0;
+      }
+
+      .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      #chat-window {
+        width: calc(100vw - 40px);
+        right: 20px;
+      }
+
+      .restaurants-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:580px) {
+      nav {
+        height: 70px;
+        padding: 0 15px;
+      }
+
+      .logo img {
+        height: 40px;
+      }
+
+      .nav-actions {
+        gap: 0.4rem;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .restaurants-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        height: 420px;
+        margin-top: 0;
+      }
+
+      .slide-emoji {
+        display: none;
+      }
+
+      .marquee-container {
+        margin-top: 70px;
+      }
+
+      .marquee-content span {
+        font-size: 0.85rem;
+        padding: 0 20px;
+      }
+    }
+
+    /* ── AI CHATBOT ── */
+    #chat-bubble {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 1000;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #ff8c00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(255, 75, 43, 0.45);
+      transition: all .3s;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+    }
+
+    #chat-bubble:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 40px rgba(255, 75, 43, 0.55);
+    }
+
+    #chat-bubble .pulse {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 12px;
+      height: 12px;
+      background: var(--green);
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    #chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      z-index: 1000;
+      width: 360px;
+      max-height: 500px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #f0ece8;
+    }
+
+    #chat-window.open {
+      display: flex;
+      animation: slideUp .3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), #ff8c00);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .chat-header-info h4 {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .chat-header-info p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.78rem;
+    }
+
+    .chat-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity .2s;
+    }
+
+    .chat-close:hover {
+      opacity: 1;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 300px;
+    }
+
+    .chat-msg {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .chat-msg.bot {
+      background: #f4f1ee;
+      color: var(--dark);
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .chat-msg.user {
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+    }
+
+    .chat-suggestions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 16px 12px;
+    }
+
+    .chip {
+      background: #fff5f3;
+      border: 1px solid #ffd5cc;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .chip:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      border-top: 1px solid #f0ece8;
+      align-items: center;
+    }
+
+    #chat-input {
+      flex: 1;
+      border: 1.5px solid #f0ece8;
+      border-radius: 50px;
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+      background: #faf7f4;
+    }
+
+    #chat-input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    #chat-send {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+
+    #chat-send:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 10px 14px;
+    }
+
+    .typing span {
+      width: 7px;
+      height: 7px;
+      background: #aaa;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes bounce {
+      0%,
+      60%,
+      100% {
+        transform: translateY(0)
+      }
+
+      30% {
+        transform: translateY(-6px)
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <a href="#" class="logo"><img src="foodliologo-removebg-preview.png" alt="Foodlio Logo"></a>
+    <span class="nav-separator">|</span>
+    <ul class="nav-links">
+      <li><a href="#offers">Offers</a></li>
+      <li><a href="#restaurants">Restaurants</a></li>
+      <li><a href="#dineout">Dineout</a></li>
+      <li><a href="#dineout">Earn Points</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="tel:+918001234567" class="btn btn-outline">Call Us</a>
+      <a href="#" class="btn btn-primary">Order Now</a>
+    </div>
+  </nav>
+
+  <!-- ── OFFERS MARQUEE ── -->
+  <div class="marquee-container">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span> Flat 50% OFF on your first order!</span>
+        <span> Buy 1 Get 1 Free on all Medium Pizzas</span>
+        <span> Free Delivery on orders over ₹499</span>
+        <span> Happy Hours 4PM - 6PM: Upto 60% OFF</span>
+      </div>
+      <div class="marquee-content" aria-hidden="true">
+        <span> Flat 50% OFF on your first order!</span>
+        <span> Buy 1 Get 1 Free on all Medium Pizzas</span>
+        <span> Free Delivery on orders over ₹499</span>
+        <span> Happy Hours 4PM - 6PM: Upto 60% OFF</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO BANNER ── -->
+  <div class="hero">
+    <div class="slides-track" id="slidesTrack">
+
+      <div class="slide" style="background-image: url('Royal Kitchen\'s flavorful biryani banner.png');"></div>
+      <div class="slide" style="background-image: url('Appetizing Combo Meal Banner.png');"></div>
+      <div class="slide" style="background-image: url('dessert banner.png');"></div>
+      <div class="slide" style="background-image: url('Irresistible desserts banner.png');"></div>
+
+    </div>
+
+    <button class="hero-arrow left" id="prevBtn">‹</button>
+    <button class="hero-arrow right" id="nextBtn">›</button>
+    <div class="hero-dots" id="heroDots">
+      <div class="dot active" data-i="0"></div>
+      <div class="dot" data-i="1"></div>
+      <div class="dot" data-i="2"></div>
+      <div class="dot" data-i="3"></div>
+    </div>
+  </div>
+
+  <!-- ── TOP OFFERS TODAY ── -->
+  <section id="offers" style="background: #fdfdfd;">
+    <div class="section-header">
+      <h2 class="section-title">Top offers today</h2>
+    </div>
+    <div class="offers-scroll-wrapper">
+      <button class="offers-scroll-btn left hidden" id="offersLeft">←</button>
+      <div class="offers-fade-left" id="offersFadeLeft"></div>
+      <div class="offers-track" id="offersTrack">
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="biryani.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">BIRYANI</div>
+          <div class="offer-label">₹99</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="pizza.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">VALUE FUN PIZZAS</div>
+          <div class="offer-label">₹124</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="avocado-salad.jpg" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">GUILT FREE</div>
+          <div class="offer-label" style="color:var(--green)">FREE</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="sushi.jpg" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">WHAT'S NEW</div>
+          <div class="offer-label" style="color:var(--dark)">NEW</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="burger.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">BURGERS</div>
+          <div class="offer-label">₹79</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="beverages.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">BEVERAGES</div>
+          <div class="offer-label">₹49</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="noodles.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">NOODLES</div>
+          <div class="offer-label">₹89</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="shawarma.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">SHAWARMA</div>
+          <div class="offer-label">₹149</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="tacos.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">TACOS</div>
+          <div class="offer-label">₹69</div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-emoji"><img src="ice cream.jfif" alt="A descriptive description of the image">
+          </div>
+          <div class="offer-name">DESSERTS</div>
+          <div class="offer-label">₹59</div>
+        </div>
+      </div>
+      <div class="offers-fade-right" id="offersFadeRight"></div>
+      <button class="offers-scroll-btn right" id="offersRight">→</button>
+    </div>
+  </section>
+
+  <!-- ── DISCOVER RESTAURANTS ── -->
+  <section id="restaurants">
+    <div class="section-header">
+      <h2 class="section-title">Discover best restaurants on Dineout</h2>
+    </div>
+    <div class="restaurants-grid" id="restaurants">
+      <!-- Card 1 -->
+      <div class="restaurant-card">
+        <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2d0a0a,#8B0000)"><img
+            src="chinese.jfif" alt="A descriptive description of the image">
+        </div>
+        <div class="rest-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div class="rest-name">Chinese Restaurant</div>
+            <div class="rest-rating">★ 3.8</div>
+          </div>
+          <div class="rest-meta">
+            <span>Chinese · Kerala</span>
+            <span class="rest-price">₹600 for two</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">Carmel Buildings, Kacheripadi, Kochi
+            · 8.6 km</div>
+          <div class="rest-offer"> Flat 10% off on walk-in &nbsp;<b>+1 more</b></div>
+          <div class="rest-offer" style="margin-top:6px;"> Up to 10% off with bank offers</div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="restaurant-card">
+        <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#003300,#1a5c1a)"><img
+            src="starbucks.jfif" alt="A descriptive description of the image">
+        </div>
+        <div class="rest-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div class="rest-name">Starbucks Coffee</div>
+            <div class="rest-rating">★ 4.3</div>
+          </div>
+          <div class="rest-meta">
+            <span>Desserts · Fast Food</span>
+            <span class="rest-price">₹900 for two</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">Emakulam, Kochi · 14.6 km</div>
+          <div class="rest-offer"> Up to 10% off with bank offers</div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="restaurant-card">
+        <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#1a2a3a,#3a5a7a)"><img
+            src="arabian.jfif" alt="A descriptive description of the image">
+        </div>
+        <div class="rest-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div class="rest-name">Arabian Restaurant</div>
+            <div class="rest-rating">★ 4.2</div>
+          </div>
+          <div class="rest-meta">
+            <span>South Indian · Arabian</span>
+            <span class="rest-price">₹800 for two</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">Kaloor, Kochi · 10.8 km</div>
+          <div class="rest-offer"> Up to 10% off with bank offers</div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="restaurant-card">
+        <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2a1a00,#7a4a00)"><img
+            src="northindian.jfif" alt="A descriptive description of the image">
+        </div>
+        <div class="rest-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div class="rest-name">Mezban Matta</div>
+            <div class="rest-rating">★ 4.5</div>
+          </div>
+          <div class="rest-meta">
+            <span>Kerala · North Indian</span>
+            <span class="rest-price">₹700 for two</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">Mattancherry, Kochi · 12.1 km</div>
+          <div class="rest-offer"> Flat 15% off on first order</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CALL SUPPORT BAR ── -->
+  <div class="support-bar">
+    <div class="support-bar-text">
+      <h3>Need help with your order?</h3>
+      <p>Our support team is available 24/7 — just give us a call or chat with our AI assistant.</p>
+    </div>
+    <a href="tel:+918001234567" class="call-btn">
+      <span class="call-icon">📞</span>
+      Call +91 800-123-4567
+    </a>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer id="about">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="foodliologo-removebg-preview.png" alt="Foodlio Logo" style="height: 50px; margin-bottom: 15px;">
+        <p>Delivering happiness to your doorstep. Fresh, fast, and always delicious.</p>
+        <p style="margin-top:10px;font-size:0.82rem;color:#aaa;">© 2025 Foodlio Limited</p>
+        <div class="social-links">
+          <a class="social-link" href="#"><img src="linkedin.png" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="instagram.jfif" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="facebook.png" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="twitter.png" alt="blahblahblah"></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Foodlio Corporate</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Team</a></li>
+          <li><a href="#">Foodlio One</a></li>
+          <li><a href="#">Foodlio Instamart</a></li>
+          <li><a href="#">Dineout</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <ul>
+          <li><a href="#">Help &amp; Support</a></li>
+          <li><a href="#">Partner With Us</a></li>
+          <li><a href="#">Ride With Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Available In</h4>
+        <ul>
+          <li><a href="#">kerala</a></li>
+          <li><a href="#">Hyderabad</a></li>
+          <li><a href="#">Kochi</a></li>
+          <li><a href="#">Delhi</a></li>
+          <li><a href="#">Mumbai</a></li>
+          <li><a href="#">Pune</a></li>
+          <li><a href="#">685+ cities</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms &amp; Conditions</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>For the best experience, download the Foodlio app now</p>
+      <div class="app-badges">
+        <a class="app-badge" target="_blank" href="https://www.apple.com/in/app-store/"><span><img
+              src="appstore-removebg-preview.png" alt=""></span> App Store</a>
+        <a class="app-badge" target="_blank" href="https://play.google.com/store/games?hl=en_IN"><span><img
+              src="playstore-removebg-preview.png" alt=""></span> Google Play</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── AI CHATBOT BUBBLE ── -->
+  <button id="chat-bubble" onclick="toggleChat()">
+    🤖
+    <div class="pulse"></div>
+  </button>
+
+  <div id="chat-window">
+    <div class="chat-header">
+      <div class="chat-avatar">🤖</div>
+      <div class="chat-header-info">
+        <h4>Foodlio AI Assistant</h4>
+        <p>Online · Replies instantly</p>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">👋 Hi! I'm your Foodlio AI assistant. How can I help you today?</div>
+      <div class="chat-msg bot">I can help you with orders, offers, delivery status, and more!</div>
+    </div>
+    <div class="chat-suggestions">
+      <span class="chip" onclick="quickSend('Track my order')">Track my order</span>
+      <span class="chip" onclick="quickSend('Today\'s offers')">Today's offers</span>
+      <span class="chip" onclick="quickSend('Help with payment')">Payment help</span>
+      <span class="chip" onclick="quickSend('Restaurants near me')">Restaurants near me</span>
+    </div>
+    <div class="chat-input-row">
+      <input id="chat-input" type="text" placeholder="Type your message..."
+        onkeydown="if(event.key==='Enter')sendMessage()" />
+      <button id="chat-send" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Offers Horizontal Scroll ──
+    const offersTrack = document.getElementById('offersTrack');
+    const offersLeft = document.getElementById('offersLeft');
+    const offersRight = document.getElementById('offersRight');
+    const offersFadeLeft = document.getElementById('offersFadeLeft');
+    const offersFadeRight = document.getElementById('offersFadeRight');
+    const SCROLL_AMT = 360;
+
+    function updateOffersBtns() {
+      const { scrollLeft, scrollWidth, clientWidth } = offersTrack;
+      offersLeft.classList.toggle('hidden', scrollLeft < 10);
+      offersFadeLeft.style.opacity = scrollLeft < 10 ? '0' : '1';
+      offersRight.classList.toggle('hidden', scrollLeft + clientWidth >= scrollWidth - 10);
+      offersFadeRight.style.opacity = scrollLeft + clientWidth >= scrollWidth - 10 ? '0' : '1';
+    }
+
+    offersLeft.onclick = () => { offersTrack.scrollBy({ left: -SCROLL_AMT, behavior: 'smooth' }); };
+    offersRight.onclick = () => { offersTrack.scrollBy({ left: SCROLL_AMT, behavior: 'smooth' }); };
+    offersTrack.addEventListener('scroll', updateOffersBtns);
+    updateOffersBtns();
+
+    // drag-to-scroll
+    let isDragging = false, startX, scrollStart;
+    offersTrack.addEventListener('mousedown', e => { isDragging = true; startX = e.pageX; scrollStart = offersTrack.scrollLeft; offersTrack.style.userSelect = 'none'; });
+    document.addEventListener('mousemove', e => { if (!isDragging) return; offersTrack.scrollLeft = scrollStart - (e.pageX - startX); });
+    document.addEventListener('mouseup', () => { isDragging = false; offersTrack.style.userSelect = ''; });
+
+    // ── Hero Slider ──
+    let current = 0;
+    const total = 4;
+    const track = document.getElementById('slidesTrack');
+    const dots = document.querySelectorAll('.dot');
+    let autoTimer;
+
+    function goTo(i) {
+      current = (i + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, j) => d.classList.toggle('active', j === current));
+    }
+
+    document.getElementById('prevBtn').onclick = () => { clearInterval(autoTimer); goTo(current - 1); startAuto(); };
+    document.getElementById('nextBtn').onclick = () => { clearInterval(autoTimer); goTo(current + 1); startAuto(); };
+    dots.forEach(d => d.addEventListener('click', () => { clearInterval(autoTimer); goTo(+d.dataset.i); startAuto(); }));
+
+    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 4000); }
+    startAuto();
+
+    // ── Chatbot ──
+    const responses = {
+      'track my order': "🔍 Sure! Please share your order ID and I'll pull up the latest status right away.",
+      "today's offers": "🔥 Today's hot picks:\n• Biryani at ₹99\n• Value Fun Pizzas at ₹99\n• Happy Hours (4–6 PM): 50% OFF!\n• Guilt-Free bowls – FREE with select orders!",
+      'help with payment': "💳 I can help! We accept UPI, credit/debit cards, net banking, and Foodlio Pay. If you're facing an issue, please describe it.",
+      'restaurants near me': "📍 Based on your location in Kerala, here are top picks:\n• San Joe (Chinese) – 8.6km\n• Starbucks Coffee – 14.6km\n• The Taapioca Restaurant – 10.8km",
+      'default': "Thanks for reaching out! 😊 I'll connect you with a specialist. In the meantime, you can call us at +91 800-123-4567 or ask me anything else!"
+    };
+
+    function toggleChat() {
+      const win = document.getElementById('chat-window');
+      win.classList.toggle('open');
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+      addMsg(msg, 'user');
+      input.value = '';
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        const key = Object.keys(responses).find(k => msg.toLowerCase().includes(k)) || 'default';
+        addMsg(responses[key], 'bot');
+      }, 900);
+    }
+
+    function quickSend(text) {
+      document.getElementById('chat-input').value = text;
+      sendMessage();
+    }
+
+    function addMsg(text, type) {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${type}`;
+      div.textContent = text;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg bot typing'; div.id = 'typingIndicator';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const t = document.getElementById('typingIndicator');
+      if (t) t.remove();
+    }
+  </script>
+</body>
+
+</html>
