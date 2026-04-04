@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foodlio — Order Food & More</title>
-  <link rel="icon" href="foodliologo.png" type="image/png" />
+  <link rel="icon" href="assets/images/logos/foodliologo.png" type="image/png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
@@ -94,6 +94,115 @@
       gap: 0.8rem;
       align-items: center;
       margin-left: 1rem;
+    }
+
+    /* HAMBURGER MENU */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 1001;
+      padding: 10px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: var(--dark);
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+      background: var(--primary);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+      background: var(--primary);
+    }
+
+    @media (max-width: 992px) {
+      nav {
+        justify-content: space-between;
+        padding: 0 4%;
+        gap: 0;
+      }
+
+      .nav-separator,
+      .nav-links,
+      .nav-actions {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      /* MOBILE MENU OPEN */
+      .nav-links.active {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        z-index: 1000;
+        padding: 2.5rem 2rem;
+        gap: 1.2rem;
+        animation: slideIn 0.4s ease forwards;
+        overflow-y: auto;
+      }
+
+      .mobile-only {
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .mobile-only .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 1rem;
+      }
+
+      .nav-links.active li {
+        width: 100%;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 12px;
+      }
+
+      .nav-links.active a {
+        font-size: 1.2rem;
+        width: 100%;
+        display: block;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
     }
 
     .btn {
@@ -1174,19 +1283,29 @@
 
   <!-- ── NAVBAR ── -->
   <nav>
-    <a href="#" class="logo"><img src="foodliologo-removebg-preview.png" alt="Foodlio Logo"></a>
+    <a href="#" class="logo"><img src="assets/images/logos/foodliologo-removebg-preview.png" alt="Foodlio Logo"></a>
     <span class="nav-separator">|</span>
     <ul class="nav-links">
       <li><a href="#offers">Offers</a></li>
       <li><a href="#restaurants">Restaurants</a></li>
       <li><a href="#dineout">Dineout</a></li>
-      <li><a href="#dineout">Earn Points</a></li>
+      <li><a href="game.html">Earn Points</a></li>
       <li><a href="./aboutus.html" onclick="window.location.href='./aboutus.html'; return false;">About</a></li>
+      <!-- MobileCTAs -->
+      <li class="mobile-only" style="display:none;">
+        <a href="tel:+918001234567" class="btn btn-outline">Call Us</a>
+        <a href="https://www.swiggy.com/restaurants" class="btn btn-primary" style="margin-top: 5px;">Order Now</a>
+      </li>
     </ul>
     <div class="nav-actions">
       <a href="tel:+918001234567" class="btn btn-outline">Call Us</a>
-      <a href="#" class="btn btn-primary">Order Now</a>
+      <a href="https://www.swiggy.com/restaurants" class="btn btn-primary">Order Now</a>
     </div>
+    <button class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- ── OFFERS MARQUEE ── -->
@@ -1211,10 +1330,10 @@
   <div class="hero">
     <div class="slides-track" id="slidesTrack">
 
-      <div class="slide" style="background-image: url('Royal Kitchen\'s flavorful biryani banner.png');"></div>
-      <div class="slide" style="background-image: url('Appetizing Combo Meal Banner.png');"></div>
-      <div class="slide" style="background-image: url('dessert banner.png');"></div>
-      <div class="slide" style="background-image: url('Irresistible desserts banner.png');"></div>
+      <div class="slide" style="background-image: url('assets/images/banners/Royal Kitchen\'s flavorful biryani banner.png');"></div>
+      <div class="slide" style="background-image: url('assets/images/banners/Appetizing Combo Meal Banner.png');"></div>
+      <div class="slide" style="background-image: url('assets/images/banners/dessert banner.png');"></div>
+      <div class="slide" style="background-image: url('assets/images/banners/Irresistible desserts banner.png');"></div>
 
     </div>
 
@@ -1238,61 +1357,61 @@
       <div class="offers-fade-left" id="offersFadeLeft"></div>
       <div class="offers-track" id="offersTrack">
         <div class="offer-card">
-          <div class="offer-emoji"><img src="biryani.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/biryani.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">BIRYANI</div>
           <div class="offer-label">₹99</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="pizza.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/pizza.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">VALUE FUN PIZZAS</div>
           <div class="offer-label">₹124</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="avocado-salad.jpg" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/avocado-salad.jpg" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">GUILT FREE</div>
           <div class="offer-label" style="color:var(--green)">FREE</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="sushi.jpg" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/sushi.jpg" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">WHAT'S NEW</div>
           <div class="offer-label" style="color:var(--dark)">NEW</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="burger.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/burger.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">BURGERS</div>
           <div class="offer-label">₹79</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="beverages.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/beverages.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">BEVERAGES</div>
           <div class="offer-label">₹49</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="noodles.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/noodles.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">NOODLES</div>
           <div class="offer-label">₹89</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="shawarma.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/shawarma.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">SHAWARMA</div>
           <div class="offer-label">₹149</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="tacos.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/tacos.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">TACOS</div>
           <div class="offer-label">₹69</div>
         </div>
         <div class="offer-card">
-          <div class="offer-emoji"><img src="ice cream.jfif" alt="A descriptive description of the image">
+          <div class="offer-emoji"><img src="assets/images/menu/ice cream.jfif" alt="A descriptive description of the image">
           </div>
           <div class="offer-name">DESSERTS</div>
           <div class="offer-label">₹59</div>
@@ -1306,13 +1425,13 @@
   <!-- ── DISCOVER RESTAURANTS ── -->
   <section id="restaurants">
     <div class="section-header">
-      <h2 class="section-title">Discover best restaurants on Dineout</h2>
+      <h2 class="section-title"> best restaurants</h2>
     </div>
     <div class="restaurants-grid" id="restaurants">
       <!-- Card 1 -->
       <div class="restaurant-card">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2d0a0a,#8B0000)"><img
-            src="chinese.jfif" alt="A descriptive description of the image">
+            src="assets/images/menu/chinese.jfif" alt="A descriptive description of the image">
         </div>
         <div class="rest-body">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -1332,7 +1451,7 @@
       <!-- Card 2 -->
       <div class="restaurant-card">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#003300,#1a5c1a)"><img
-            src="starbucks.jfif" alt="A descriptive description of the image">
+            src="assets/images/menu/starbucks.jfif" alt="A descriptive description of the image">
         </div>
         <div class="rest-body">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -1350,7 +1469,7 @@
       <!-- Card 3 -->
       <div class="restaurant-card">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#1a2a3a,#3a5a7a)"><img
-            src="arabian.jfif" alt="A descriptive description of the image">
+            src="assets/images/menu/arabian.jfif" alt="A descriptive description of the image">
         </div>
         <div class="rest-body">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -1368,7 +1487,7 @@
       <!-- Card 4 -->
       <div class="restaurant-card">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2a1a00,#7a4a00)"><img
-            src="northindian.jfif" alt="A descriptive description of the image">
+            src="assets/images/menu/northindian.jfif" alt="A descriptive description of the image">
         </div>
         <div class="rest-body">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -1402,14 +1521,14 @@
   <footer id="about">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="foodliologo-removebg-preview.png" alt="Foodlio Logo" style="height: 50px; margin-bottom: 15px;">
+        <img src="assets/images/logos/foodliologo-removebg-preview.png" alt="Foodlio Logo" style="height: 50px; margin-bottom: 15px;">
         <p>Delivering happiness to your doorstep. Fresh, fast, and always delicious.</p>
         <p style="margin-top:10px;font-size:0.82rem;color:#aaa;">© 2025 Foodlio Limited</p>
         <div class="social-links">
-          <a class="social-link" href="#"><img src="linkedin.png" alt="blahblahblah"></a>
-          <a class="social-link" href="#"><img src="instagram.jfif" alt="blahblahblah"></a>
-          <a class="social-link" href="#"><img src="facebook.png" alt="blahblahblah"></a>
-          <a class="social-link" href="#"><img src="twitter.png" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="assets/images/social/linkedin.png" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="assets/images/social/instagram.jfif" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="assets/images/social/facebook.png" alt="blahblahblah"></a>
+          <a class="social-link" href="#"><img src="assets/images/social/twitter.png" alt="blahblahblah"></a>
         </div>
       </div>
       <div class="footer-col">
@@ -1457,9 +1576,9 @@
       <p>For the best experience, download the Foodlio app now</p>
       <div class="app-badges">
         <a class="app-badge" target="_blank" href="https://www.apple.com/in/app-store/"><span><img
-              src="appstore-removebg-preview.png" alt=""></span> App Store</a>
+              src="assets/images/badges/appstore-removebg-preview.png" alt=""></span> App Store</a>
         <a class="app-badge" target="_blank" href="https://play.google.com/store/games?hl=en_IN"><span><img
-              src="playstore-removebg-preview.png" alt=""></span> Google Play</a>
+              src="assets/images/badges/playstore-removebg-preview.png" alt=""></span> Google Play</a>
       </div>
     </div>
   </footer>
@@ -1595,10 +1714,24 @@
       msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function removeTyping() {
-      const t = document.getElementById('typingIndicator');
-      if (t) t.remove();
-    }
+    // ── Hamburger Menu Toggle ──
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const mobileLinks = document.querySelectorAll('.nav-links a');
+
+    hamburger.onclick = () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    };
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
   </script>
 </body>
 
