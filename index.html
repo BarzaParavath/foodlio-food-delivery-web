@@ -1154,6 +1154,7 @@
       border-radius: 14px;
       font-size: 0.88rem;
       line-height: 1.5;
+      white-space: pre-line;
     }
 
     .chat-msg.bot {
@@ -1429,7 +1430,7 @@
     </div>
     <div class="restaurants-grid" id="restaurants">
       <!-- Card 1 -->
-      <div class="restaurant-card">
+      <div class="restaurant-card" onclick="window.location.href='https://www.swiggy.com/dineout'">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2d0a0a,#8B0000)"><img
             src="assets/images/menu/chinese.jfif" alt="A descriptive description of the image">
         </div>
@@ -1449,7 +1450,7 @@
         </div>
       </div>
       <!-- Card 2 -->
-      <div class="restaurant-card">
+      <div class="restaurant-card" onclick="window.location.href='https://www.swiggy.com/dineout'">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#003300,#1a5c1a)"><img
             src="assets/images/menu/starbucks.jfif" alt="A descriptive description of the image">
         </div>
@@ -1467,7 +1468,7 @@
         </div>
       </div>
       <!-- Card 3 -->
-      <div class="restaurant-card">
+      <div class="restaurant-card" onclick="window.location.href='https://www.swiggy.com/dineout'">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#1a2a3a,#3a5a7a)"><img
             src="assets/images/menu/arabian.jfif" alt="A descriptive description of the image">
         </div>
@@ -1485,7 +1486,7 @@
         </div>
       </div>
       <!-- Card 4 -->
-      <div class="restaurant-card">
+      <div class="restaurant-card" onclick="window.location.href='https://www.swiggy.com/dineout'">
         <div class="rest-img-placeholder" style="background:linear-gradient(135deg,#2a1a00,#7a4a00)"><img
             src="assets/images/menu/northindian.jfif" alt="A descriptive description of the image">
         </div>
@@ -1665,10 +1666,12 @@
 
     // ── Chatbot ──
     const responses = {
-      'track my order': "🔍 Sure! Please share your order ID and I'll pull up the latest status right away.",
-      "today's offers": "🔥 Today's hot picks:\n• Biryani at ₹99\n• Value Fun Pizzas at ₹99\n• Happy Hours (4–6 PM): 50% OFF!\n• Guilt-Free bowls – FREE with select orders!",
-      'help with payment': "💳 I can help! We accept UPI, credit/debit cards, net banking, and Foodlio Pay. If you're facing an issue, please describe it.",
-      'restaurants near me': "📍 Based on your location in Kerala, here are top picks:\n• San Joe (Chinese) – 8.6km\n• Starbucks Coffee – 14.6km\n• The Taapioca Restaurant – 10.8km",
+      'track': "🔍 Sure! Please share your order ID and I'll pull up the latest status right away.",
+      'offer': "🔥 Today's hot picks:\n• Biryani at ₹99\n• Value Fun Pizzas at ₹99\n• Happy Hours (4–6 PM): 50% OFF!\n• Guilt-Free bowls – FREE with select orders!",
+      'pay': "💳 I can help! We accept UPI, credit/debit cards, net banking, and Foodlio Pay. If you're facing an issue, please describe it.",
+      'near': "📍 Based on your location in Kerala, here are top picks:\n• San Joe (Chinese) – 8.6km\n• Starbucks Coffee – 14.6km\n• The Taapioca Restaurant – 10.8km",
+      'order': "🍔 Looking to order? You can browse restaurants in the 'Restaurants' section above or ask me for recommendations!",
+      'help': "I'm here to help! You can ask about order status, offers, payments, or restaurants near you. 😊",
       'default': "Thanks for reaching out! 😊 I'll connect you with a specialist. In the meantime, you can call us at +91 800-123-4567 or ask me anything else!"
     };
 
@@ -1706,12 +1709,18 @@
     }
 
     function showTyping() {
+      if (document.getElementById('typingIndicator')) return;
       const msgs = document.getElementById('chatMessages');
       const div = document.createElement('div');
       div.className = 'chat-msg bot typing'; div.id = 'typingIndicator';
       div.innerHTML = '<span></span><span></span><span></span>';
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const typing = document.getElementById('typingIndicator');
+      if (typing) typing.remove();
     }
 
     // ── Hamburger Menu Toggle ──

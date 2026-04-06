@@ -4,15 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Arrow — Earn Foodlio Points</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Foodlio — The Puzzle</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
     <style>
         :root {
-            --primary: #FF474D;
-            --primary-dark: #C1121F;
-            --dark: #1D3557;
-            --light: #ffffff;
-            --glass: rgba(255, 255, 255, 0.15);
+            --white: #ffffff;
+            --cream: #faf9f6;
+            --platinum: #e5e4e2;
+            --gold: #d4af37;
+            --dark: #1d3557;
+            --accent: #ff474d;
+            --radius: 24px;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -22,374 +27,386 @@
         }
 
         body {
-            margin: 0;
-            background: radial-gradient(circle at center, #2b2b2b, #111);
-            color: white;
             font-family: 'DM Sans', sans-serif;
-            overflow: hidden;
+            background: linear-gradient(135deg, #ffddb7 0%, #fafafa 100%);
+            color: var(--dark);
             height: 100vh;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        .game-container {
+        /* ── BACKGROUND ACCENTS ── */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #ffe4e4;
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            background: #e0f2f1;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        /* ── COMPONENTS ── */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
             position: relative;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
-            overflow: hidden;
-            border: 4px solid rgba(255, 255, 255, 0.1);
         }
 
-        canvas {
-            display: block;
-            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-            cursor: crosshair;
-        }
-
-        .hud {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
+        .hidden {
+            display: none !important;
+            opacity: 0;
             pointer-events: none;
         }
 
-        .hud-item {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffd7a9;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 71, 77, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--platinum);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── GAME GRID ── */
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto 30px;
+            width: 300px;
+            height: 300px;
+            background: #ffebb2;
+            padding: 10px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tile {
+            width: 86.6px;
+            height: 86.6px;
+            background: var(--white);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            color: var(--dark);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hud-item span {
-            color: var(--primary);
-            margin-left: 8px;
+        .tile:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
-        #game-over-overlay {
+        .tile.empty {
+            background: transparent;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        .tile::after {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            text-align: center;
-            animation: fadeIn 0.4s ease;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+        .food-label {
+            position: absolute;
+            bottom: 4px;
+            font-size: 0.6rem;
+            color: #aaa;
+            font-weight: 400;
+            font-family: 'DM Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        #game-over-overlay h2 {
-            font-size: 3.5rem;
-            color: #fff;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .final-score {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .btn-group {
+        /* ── STATS ── */
+        .stats {
             display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 14px 28px;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.25s;
-            text-decoration: none;
-            font-size: 1rem;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-        }
-
-        .btn-home {
-            background: #fff;
-            color: var(--dark);
-        }
-
-        .btn-home:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
-        }
-
-        .intro {
+            justify-content: space-between;
             margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .intro h1 {
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-        }
-
-        .intro p {
-            opacity: 0.6;
             font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* ── VICTORY ── */
+        .victory-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .score-highlight {
+            font-size: 3rem;
+            color: var(--accent);
+            font-weight: 900;
+            margin: 10px 0;
+            display: block;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .puzzle-grid {
+                width: 260px;
+                height: 260px;
+            }
+
+            .tile {
+                width: calc((260px - 20px - 20px) / 3);
+                height: calc((260px - 20px - 20px) / 3);
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
 
-    <div class="intro">
-        <h1>🏹 Food Arrow</h1>
-        <p>Shoot the food to earn points for your Foodlio wallet!</p>
+    <!-- ── GATE SCREEN ── -->
+    <div id="gate-screen" class="card">
+        <h1>Number Puzzle</h1>
+        <p>Win the puzzle and earn points for amazing offers!!</p>
+        <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 25px;">Are you a premium member?</div>
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="proceedToGame(true)">Yes, I am</button>
+            <button class="btn btn-outline" onclick="proceedToGame(false)">Not yet</button>
+        </div>
     </div>
 
-    <div class="game-container">
-        <div class="hud">
-            <div class="hud-item">Score: <span id="score">0</span></div>
-            <div class="hud-item">Arrows: <span id="arrows">5</span></div>
+    <!-- ── GAME SCREEN ── -->
+    <div id="game-screen" class="card hidden">
+        <div class="stats">
+            <span>Points: <span id="total-points">0</span></span>
+            <span>Moves: <span id="move-count">0</span></span>
+        </div>
+        <h1>Foodlio Puzzle</h1>
+        <p id="game-subtitle">Order the tiles from 1 to 8.</p>
+
+        <div class="puzzle-grid" id="puzzle-grid">
+            <!-- Tiles generated by JS -->
         </div>
 
-        <canvas id="gameCanvas" width="900" height="450"></canvas>
+        <div class="btn-row">
+            <button class="btn btn-outline" onclick="resetGame()">Shuffle</button>
+            <button class="btn btn-outline" onclick="exitGame()">Exit</button>
+        </div>
+    </div>
 
-        <div id="game-over-overlay">
-            <h2 id="overlay-title">Game Over!</h2>
-            <p class="final-score" id="final-score-text">Final Points: 0</p>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="restartGame()">Play Again</button>
-                <a href="index.html" class="btn btn-home">Return Home</a>
-            </div>
+    <!-- ── VICTORY SCREEN ── -->
+    <div id="victory-screen" class="card hidden">
+        <span class="victory-icon">🍰</span>
+        <h1>Deliciously Solved!</h1>
+        <p>You've mastered the foodlio challenge!!</p>
+        <span class="score-highlight">+1 Point</span>
+        <p>Grand Total: <span id="final-points">0</span></p>
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="playAgain()">New Game</button>
+            <button class="btn btn-outline" onclick="exitGame()">Exit</button>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+        let tiles = [1, 2, 3, 4, 5, 6, 7, 8, null];
+        let moves = 0;
+        let points = parseInt(localStorage.getItem('foodlio_points')) || 0;
+        const foodNames = ["Milk", "Flour", "Egg", "Rice", "Sugar", "Coconut", "Garlic", "Salt"];
 
-        // Asset Loading
-        const imgTargets = new Image();
-        imgTargets.src = "assets/images/game/game_targets_assets_1775269350879.png";
+        function updateStats() {
+            document.getElementById('total-points').textContent = points;
+            document.getElementById('move-count').textContent = moves;
+        }
 
-        const imgBowArrow = new Image();
-        imgBowArrow.src = "assets/images/game/game_bow_and_arrow_assets_1775269442618.png";
-
-        let assetsLoaded = 0;
-        const onAssetLoad = () => {
-            assetsLoaded++;
-            if (assetsLoaded === 2) {
-                // Start game loop only after assets load
-                updateUI();
-                gameLoop();
+        function proceedToGame(isPremium) {
+            document.getElementById('gate-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            if (isPremium) {
+                const subtitle = document.getElementById('game-subtitle');
+                subtitle.textContent = "Welcome, VIP! Your exclusive gourmet challenge awaits.";
+                subtitle.style.color = "var(--gold)";
             }
-        };
+            initGame();
+        }
 
-        imgTargets.onload = onAssetLoad;
-        imgBowArrow.onload = onAssetLoad;
+        function initGame() {
+            shuffleTiles();
+            renderTiles();
+            updateStats();
+        }
 
-        let score = 0;
-        let arrowsLeft = 5;
-        let gameOverStatus = false;
-
-        // Arrow Object
-        let arrow = {
-            x: 80,
-            y: 225,
-            width: 60,
-            height: 15,
-            speed: 12,
-            active: false
-        };
-
-        // Target Classes
-        class Target {
-            constructor(emoji, speed, type) {
-                this.reset(true);
-                this.emoji = emoji;
-                this.speed = speed;
-                this.type = type; // 0: Pizza, 1: Burger, 2: Soda
+        function shuffleTiles() {
+            tiles = [1, 2, 3, 4, 5, 6, 7, 8, null];
+            // Simulate random moves to ensure solvability
+            for (let i = 0; i < 150; i++) {
+                const emptyIndex = tiles.indexOf(null);
+                const neighbors = getNeighbors(emptyIndex);
+                const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+                [tiles[emptyIndex], tiles[randomNeighbor]] = [tiles[randomNeighbor], tiles[emptyIndex]];
             }
+            moves = 0;
+        }
 
-            reset(firstTime = false) {
-                this.x = canvas.width + (firstTime ? Math.random() * 500 : 200);
-                this.y = 50 + Math.random() * (canvas.height - 100);
-                this.size = 50;
-            }
+        function getNeighbors(index) {
+            const neighbors = [];
+            const row = Math.floor(index / 3);
+            const col = index % 3;
 
-            draw() {
-                this.x -= this.speed;
+            if (row > 0) neighbors.push(index - 3);
+            if (row < 2) neighbors.push(index + 3);
+            if (col > 0) neighbors.push(index - 1);
+            if (col < 2) neighbors.push(index + 1);
 
-                // Target Visuals (3 styles based on index)
-                // Since generated images have targets, we'll draw parts of the targets image.
-                // For simplicity with variable generated images, we draw the whole image scaled for now
-                // But better is to use the whole image as a sprite.
-                // We assume 3 targets in one image, spaced horizontally
-                const totalTargets = 3;
-                const sourceWidth = imgTargets.width / totalTargets;
+            return neighbors;
+        }
 
-                ctx.drawImage(
-                    imgTargets,
-                    this.type * sourceWidth, 0, sourceWidth, imgTargets.height, // Source
-                    this.x, this.y - this.size / 2, this.size, this.size // Destination
-                );
-
-                if (this.x < -this.size) {
-                    this.reset();
+        function renderTiles() {
+            const grid = document.getElementById('puzzle-grid');
+            grid.innerHTML = '';
+            tiles.forEach((tile, index) => {
+                const div = document.createElement('div');
+                div.className = `tile ${tile === null ? 'empty' : ''}`;
+                if (tile !== null) {
+                    div.textContent = tile;
+                    const label = document.createElement('span');
+                    label.className = 'food-label';
+                    label.textContent = foodNames[tile - 1];
+                    div.appendChild(label);
+                    div.onclick = () => moveTile(index);
                 }
-            }
-        }
-
-        let targets = [
-            new Target("🍕", 3, 0),
-            new Target("🍔", 4, 1),
-            new Target("🥤", 2.5, 2)
-        ];
-
-        // Click to shoot
-        canvas.addEventListener("mousedown", (e) => {
-            if (!arrow.active && arrowsLeft > 0 && !gameOverStatus) {
-                arrow.active = true;
-                arrowsLeft--;
-                updateUI();
-            }
-        });
-
-        function updateUI() {
-            document.getElementById("score").textContent = score;
-            document.getElementById("arrows").textContent = arrowsLeft;
-        }
-
-        function drawBow() {
-            // Draw Bow Image
-            // Assume Bow is on the left half of imgBowArrow
-            const bowWidth = imgBowArrow.width / 2;
-            ctx.drawImage(
-                imgBowArrow,
-                0, 0, bowWidth, imgBowArrow.height,
-                30, 160, 100, 130
-            );
-        }
-
-        function drawArrow() {
-            if (arrow.active) {
-                arrow.x += arrow.speed;
-            }
-
-            // Draw Arrow Image (Right half of imgBowArrow)
-            const arrowSourceX = imgBowArrow.width / 2;
-            ctx.drawImage(
-                imgBowArrow,
-                arrowSourceX, 0, arrowSourceX, imgBowArrow.height,
-                arrow.x, arrow.y - 12.5, arrow.width, arrow.height * 2
-            );
-
-            if (arrow.x > canvas.width) {
-                arrow.active = false;
-                arrow.x = 80;
-            }
-        }
-
-        function checkCollision() {
-            targets.forEach(target => {
-                const dx = arrow.x + arrow.width - target.x;
-                const dy = arrow.y - target.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (
-                    arrow.x < target.x + target.size &&
-                    arrow.x + arrow.width > target.x &&
-                    arrow.y > target.y - target.size / 2 &&
-                    arrow.y < target.y + target.size / 2
-                ) {
-                    score += 10;
-                    arrow.active = false;
-                    arrow.x = 80;
-                    target.reset();
-                    updateUI();
-
-                    // Visual Feedback
-                    ctx.fillStyle = "white";
-                    ctx.beginPath();
-                    ctx.arc(target.x, target.y, 40, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                grid.appendChild(div);
             });
         }
 
-        function showGameOver() {
-            gameOverStatus = true;
-            document.getElementById("game-over-overlay").style.display = "flex";
-            document.getElementById("overlay-title").textContent = score >= 30 ? "Winner! 🎉" : "Good Try!";
-            document.getElementById("final-score-text").textContent = `Final Points: ${score}`;
-        }
+        function moveTile(index) {
+            const emptyIndex = tiles.indexOf(null);
+            const neighbors = getNeighbors(index);
 
-        function gameLoop() {
-            if (gameOverStatus) return;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Subtle background effect
-            ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
-            for (let i = 0; i < 10; i++) {
-                ctx.fillRect(Math.sin(Date.now() * 0.001 + i) * 50 + 400, i * 50, 2, 2);
+            if (neighbors.includes(emptyIndex)) {
+                [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
+                moves++;
+                renderTiles();
+                updateStats();
+                checkWin();
             }
+        }
 
-            drawBow();
-            drawArrow();
-            targets.forEach(t => t.draw());
-            checkCollision();
-
-            if (arrowsLeft === 0 && !arrow.active) {
-                setTimeout(showGameOver, 500);
-                return;
+        function checkWin() {
+            const winState = [1, 2, 3, 4, 5, 6, 7, 8, null];
+            const isWin = tiles.every((val, i) => val === winState[i]);
+            if (isWin) {
+                setTimeout(showVictory, 600);
             }
-
-            requestAnimationFrame(gameLoop);
         }
 
-        function restartGame() {
-            score = 0;
-            arrowsLeft = 5;
-            gameOverStatus = false;
-            arrow.x = 80;
-            arrow.active = false;
-            targets.forEach(t => t.reset(true));
-            document.getElementById("game-over-overlay").style.display = "none";
-            updateUI();
-            gameLoop();
+        function showVictory() {
+            points++;
+            localStorage.setItem('foodlio_points', points);
+            document.getElementById('final-points').textContent = points;
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('victory-screen').classList.remove('hidden');
         }
+
+        function playAgain() {
+            document.getElementById('victory-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            initGame();
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        function exitGame() {
+            window.location.href = 'index.html';
+        }
+
+        // Initialize points display
+        updateStats();
 
     </script>
-
 </body>
 
 </html>
